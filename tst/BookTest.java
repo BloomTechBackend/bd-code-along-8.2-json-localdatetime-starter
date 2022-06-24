@@ -28,7 +28,7 @@ public class BookTest {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        assertTrue(isConstructorPrivate);
-        assertTrue(constructorCount == 1);
+        assertTrue(isConstructorPrivate, "Constructor is not private");
+        assertTrue(constructorCount == 0, "The number of public constructors is " + constructorCount);
     }
 }

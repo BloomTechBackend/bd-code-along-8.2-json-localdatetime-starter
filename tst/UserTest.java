@@ -18,6 +18,6 @@ public class UserTest {
         String password = "abc123";
         User user = new User("test");
         assertFalse(user.validateAndSet(password));
-        assertEquals("", user.getPassword());;
+        assertNull(user.getPassword());;
     }
 }

@@ -2,6 +2,7 @@ package models;
 
 import exceptions.BookNotFoundException;
 import exceptions.MaximumBookCheckedOutException;
+import validators.Validator;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,12 +26,21 @@ public class User {
     /**
      * Validates that the password is valid before saving it to the user.
      * Validations include a minimum character count of 8 and that a number,
-     * upper case letter, and symbol are included.
+     * upper case letter, and special character are included.
      * @param password - password to store
      * @return true if the password is successfully saved
      */
     public boolean validateAndSet(String password) {
         //TODO Step 2: Implement Password Validator using the builder pattern.
+        Validator validator = new Validator.Builder()
+                .characterLimit(8)
+                .mustIncludeUpperCaseLetter()
+                .mustIncludeNumber()
+                .mustIncludeSpecialCharacter().build();
+        if (validator.validate(password)) {
+            this.password = password;
+            return true;
+        }
         return false;
     }
 
