@@ -1,0 +1,5 @@
+package models;
+
+public enum Genre {
+    FANTASY, SCI_FI, MYSTERY, THRILLER, ROMANCE, WESTERNS, DYSTOPIAN, CONTEMPORARY;
+}
