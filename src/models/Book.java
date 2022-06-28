@@ -4,29 +4,32 @@ public class Book {
 
     private final String isbn;
     private final String title;
-    private final Genre genre;
+    private final String genre;
     private final String author;
-    private final int publishedYear;
+    private final String publishedYear;
     private final String description;
+    private final float rating;
 
     //TODO Step 3.1: make constructor private and build a Builder to replace the constructor.
-    private Book(String isbn, String title, Genre genre, String author, int publishedYear, String description) {
+    private Book(String isbn, String title, String genre, String author, String publishedYear, String description, float rating) {
         this.isbn = isbn;
         this.title = title;
         this.genre = genre;
         this.author = author;
         this.publishedYear = publishedYear;
         this.description = description;
+        this.rating = rating;
     }
 
     public static class Builder {
 
         private String isbn;
         private String title;
-        private Genre genre;
+        private String genre;
         private String author;
-        private int publishedYear;
+        private String publishedYear;
         private String description;
+        private float rating;
 
         public Builder isbn(String isbn) {
             this.isbn = isbn;
@@ -38,7 +41,7 @@ public class Book {
             return this;
         }
 
-        public Builder genre(Genre genre) {
+        public Builder genre(String genre) {
             this.genre = genre;
             return this;
         }
@@ -48,7 +51,7 @@ public class Book {
             return this;
         }
 
-        public Builder publishedYear(int publishedYear) {
+        public Builder publishedYear(String publishedYear) {
             this.publishedYear = publishedYear;
             return this;
         }
@@ -58,8 +61,13 @@ public class Book {
             return this;
         }
 
+        public Builder rating(float rating) {
+            this.rating = rating;
+            return this;
+        }
+
         public Book build() {
-            return new Book(isbn, title, genre, author, publishedYear, description);
+            return new Book(isbn, title, genre, author, publishedYear, description, rating);
         }
 
     }
@@ -72,7 +80,7 @@ public class Book {
         return title;
     }
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
@@ -80,11 +88,13 @@ public class Book {
         return author;
     }
 
-    public int getPublishedYear() {
+    public String getPublishedYear() {
         return publishedYear;
     }
 
     public String getDescription() {
         return description;
     }
+
+    public float getRating() { return rating; }
 }
