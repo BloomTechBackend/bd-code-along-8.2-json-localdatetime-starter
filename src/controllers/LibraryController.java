@@ -11,38 +11,39 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import java.io.*;
 import java.net.URL;
-import java.util.HashMap;
 
 public class LibraryController {
 
     private Library library = new Library();
 
     public void loadBooks(String resourceName) {
-        //TODO Step 2: read in book file from resources
-        //TODO NOTE: isbn is index 5, authors is 7, publication year is 8, title is 9, average_rating is 12
+        /**TODO Step 2: read in book file from resources
+         * NOTE: data in the CSV are in the following order:
+         *       isbn, authors, publication year, title, average_rating
+         */
         URL u = getClass().getClassLoader().getResource(resourceName);
         try {
             FileReader fReader = new FileReader(u.getFile());
-            CSVReader reader = new CSVReader(fReader);
+            BufferedReader reader = new BufferedReader(fReader);
 
-            String[] data = reader.readNext(); // read the header line, but ignore it
-            data = reader.readNext();
-            while (data != null) {
+            String line = reader.readLine();
+            while (line != null) {
+                String[] data = line.split(",");
                 addBook(new Book.Builder()
-                        .isbn(data[5])
-                        .author(data[7])
-                        .publishedYear(data[8])
-                        .title(data[9])
-                        .rating(Float.parseFloat(data[12]))
+                        .isbn(data[0])
+                        .author(data[1])
+                        .publishedYear(data[2])
+                        .title(data[3])
+                        .rating(Float.parseFloat(data[4]))
                         .build()
                 );
-                data = reader.readNext();
+                line = reader.readLine();
             }
 
             fReader.close();
             reader.close();
 
-        } catch (IOException | CsvValidationException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -56,6 +57,7 @@ public class LibraryController {
             int rating = Math.round(book.getRating());
             ratingCounts[rating - 1]++;
         }
+        
         DefaultPieDataset data = new DefaultPieDataset();
 
         data.setValue("1", ratingCounts[0]);
