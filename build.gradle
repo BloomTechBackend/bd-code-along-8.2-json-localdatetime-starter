@@ -7,6 +7,7 @@ repositories {
     mavenCentral()
 }
 
+//TODO Step 1: Tell gradle where our resources folder will be and add the OpenCSV dependency
 sourceSets {
     main {
         java {
