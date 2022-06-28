@@ -11,6 +11,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class LibraryController {
 
@@ -57,7 +58,27 @@ public class LibraryController {
             int rating = Math.round(book.getRating());
             ratingCounts[rating - 1]++;
         }
-        
+
+        File report = new File("ratings_report.txt");
+        try {
+            FileOutputStream stream = new FileOutputStream(report);
+            stream.write("Report\n".getBytes(StandardCharsets.UTF_8));
+            for (int i = 0; i < ratingCounts.length; i++) {
+                StringBuilder builder = new StringBuilder();
+                builder.append(i + 1);
+                builder.append("-star ratings: ");
+                builder.append(ratingCounts[i]);
+                builder.append("\n");
+                stream.write(builder.toString().getBytes(StandardCharsets.UTF_8));
+            }
+            stream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         DefaultPieDataset data = new DefaultPieDataset();
 
         data.setValue("1", ratingCounts[0]);
