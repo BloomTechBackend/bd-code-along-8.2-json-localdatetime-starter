@@ -35,7 +35,7 @@ public class LibraryController {
      * @return true if the book is checked out. Otherwise, false.
      */
     //TODO Step 1.2 - Finish checkoutBook
-    public boolean checkoutBook(Book book, User user) {
+    public boolean checkoutBook(Book book) {
         if (book.getState() != BookState.AVAILABLE) {
             return false;
         }
@@ -52,7 +52,7 @@ public class LibraryController {
      * @return true if the book was successfully checked out
      */
     //TODO Step 1.3 - Finish returnBook
-    public boolean returnBook(Book book, User user) {
+    public boolean checkInBook(Book book) {
         if (book.getState() != BookState.CHECKED_OUT) {
             return false;
         }
