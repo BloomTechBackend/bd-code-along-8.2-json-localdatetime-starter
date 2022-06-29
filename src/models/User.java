@@ -31,7 +31,6 @@ public class User {
      * @return true if the password is successfully saved
      */
     public boolean validateAndSet(String password) {
-        //TODO Step 2: Implement Password Validator using the builder pattern.
         Validator validator = new Validator.Builder()
                 .characterLimit(8)
                 .mustIncludeUpperCaseLetter()

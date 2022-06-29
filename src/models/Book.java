@@ -1,5 +1,7 @@
 package models;
 
+import enums.BookState;
+
 public class Book {
 
     private final String isbn;
@@ -8,9 +10,10 @@ public class Book {
     private final String author;
     private final String publishedYear;
     private final String description;
-    private final float rating;
+    private float rating;
+    //TODO Step 1 Add state and default it to AVAILABLE
+    private BookState state;
 
-    //TODO Step 3.1: make constructor private and build a Builder to replace the constructor.
     private Book(String isbn, String title, String genre, String author, String publishedYear, String description, float rating) {
         this.isbn = isbn;
         this.title = title;
@@ -19,6 +22,15 @@ public class Book {
         this.publishedYear = publishedYear;
         this.description = description;
         this.rating = rating;
+        this.state = BookState.AVAILABLE;
+    }
+
+    public BookState getState() {
+        return state;
+    }
+
+    public void setState(BookState state) {
+        this.state = state;
     }
 
     public static class Builder {
