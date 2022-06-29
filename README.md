@@ -1,4 +1,4 @@
-# BD Code-Along 4.2 - Gradle and File IO
+# BD Code-Along 8.1 - State and Observer Pattern
 
 ## Requirements
 
