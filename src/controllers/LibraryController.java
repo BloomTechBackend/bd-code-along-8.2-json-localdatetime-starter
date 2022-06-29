@@ -26,8 +26,78 @@ public class LibraryController {
     public LibraryController() {
         loadBooks("books.csv");
     }
+    
+    /**
+     * Checks a book out if it can. The book's state should be AVAILABLE. If it's not, return false.
+     * Upon successful check-out, the book's state should be set to CHECKED_OUT.
+     * @param book - the book to be checked out
+     * @param user - the user that is checking out the book.
+     * @return true if the book is checked out. Otherwise, false.
+     */
+    //TODO Step 1.2 - Finish checkoutBook
+    public boolean checkoutBook(Book book, User user) {
+        if (book.getState() != BookState.AVAILABLE) {
+            return false;
+        }
 
-    public void loadBooks(String resourceName) {
+        book.setState(BookState.CHECKED_OUT);
+        updateObservers(book);
+        return true;
+    }
+
+     /**
+     * Returns the book if it can. The book's state should be CHECKED_OUT. If it's anything else, return false.
+     * Upon successful check-in, the book's state should be set to CHECKED_IN.
+     * @param book - the book being checked in
+     * @return true if the book was successfully checked out
+     */
+    //TODO Step 1.3 - Finish returnBook
+    public boolean returnBook(Book book, User user) {
+        if (book.getState() != BookState.CHECKED_OUT) {
+            return false;
+        }
+
+        book.setState(BookState.CHECKED_IN);
+        updateObservers(book);
+        return true;
+    }
+
+     /**
+     * Goes through all the books and changes any state that's CHECKED_IN to AVAILABLE.
+     */
+    public void processCheckedInBooks() {
+        for (Book book : getBooks()) {
+            if (book.getState() == BookState.CHECKED_IN) {
+                book.setState(BookState.AVAILABLE);
+                updateObservers(book);
+            }
+        }
+    }
+    
+
+    //Step 2.2 Finish add, remove, and updateObservers
+    public void addObserver(BookStateObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BookStateObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void updateObservers(Book book) {
+        for (BookStateObserver observer : observers) {
+            observer.onBookStatusChanged(book);
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+   public void loadBooks(String resourceName) {
         /**
          * NOTE: data in the CSV are in the following order:
          *       isbn, authors, publication year, title, average_rating
@@ -58,71 +128,6 @@ public class LibraryController {
             e.printStackTrace();
         }
 
-    }
-
-    //Step 2.2 Finish add, remove, and updateObservers
-    public void addObserver(BookStateObserver observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(BookStateObserver observer) {
-        observers.remove(observer);
-    }
-
-    private void updateObservers(Book book) {
-        for (BookStateObserver observer : observers) {
-            observer.onBookStatusChanged(book);
-        }
-    }
-
-    /**
-     * Allows a user to checkout a book. The book's state should first be checked to see if this is a valid
-     * checkout. If the book's state is AVAILABLE, then the book can be checkout. Any other state and the book
-     * should _not_ be checked out. Before the book is checked out, you should attempt to add the book to the
-     * user. If a MaximumBookCheckedOutException is thrown, the book should _not_ be checked out.
-     * @param book - the book to be checked out
-     * @param user - the user that is checking out the book.
-     * @return true if the book is checked out. Otherwise, false.
-     */
-    //TODO Step 1.2 - Finish checkoutBook
-    public boolean checkoutBook(Book book, User user) {
-        if (book.getState() != BookState.AVAILABLE) {
-            return false;
-        }
-        try {
-            user.addBook(book);
-        } catch (MaximumBookCheckedOutException e) {
-            System.out.println("User has reached their limit on books.");
-            return false;
-        }
-        book.setState(BookState.CHECKED_OUT);
-        updateObservers(book);
-        return true;
-    }
-
-    //TODO Step 1.3 - Finish returnBook
-    public boolean returnBook(Book book, User user) {
-        if (book.getState() != BookState.CHECKED_OUT) {
-            return false;
-        }
-        try {
-            user.removeBook(book);
-        } catch (BookNotFoundException e) {
-            System.out.println("User does not have this book.");
-            return false;
-        }
-        book.setState(BookState.CHECKED_IN);
-        updateObservers(book);
-        return true;
-    }
-
-    public void processCheckedInBooks() {
-        for (Book book : getBooks()) {
-            if (book.getState() == BookState.CHECKED_IN) {
-                book.setState(BookState.AVAILABLE);
-                updateObservers(book);
-            }
-        }
     }
 
     public void produceImportReport() {
