@@ -1,4 +1,4 @@
-# BD Code-Along 8.1 - State, Observer Pattern, and Regex
+# BD Code-Along 8.2 - JSON and Dates
 
 ## Requirements
 
@@ -8,4 +8,4 @@
 ## Set Up
 
 - Clone this repo and open it in IntelliJ. 
-- This project should have a few errors that will prevent you from building. That is expected.
+- Run the main method found in [App.java](./src/App.java). If that runs successfully, you are ready to go!
