@@ -1,6 +1,5 @@
 package models;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,8 +8,6 @@ public class Receipt {
     private User user;
     private List<Book> newBooks;
     //TODO Step 2.1 - Add checkoutDate and dueBackDate
-    private LocalDateTime checkoutDate;
-    private LocalDateTime dueBackDate;
 
     public Receipt(User user, Book book) {
         this.user = user;
@@ -38,19 +35,4 @@ public class Receipt {
         this.newBooks = newBooks;
     }
 
-    public LocalDateTime getCheckoutDate() {
-        return checkoutDate;
-    }
-
-    public void setCheckoutDate(LocalDateTime checkoutDate) {
-        this.checkoutDate = checkoutDate;
-    }
-
-    public LocalDateTime getDueBackDate() {
-        return dueBackDate;
-    }
-
-    public void setDueBackDate(LocalDateTime dueBackDate) {
-        this.dueBackDate = dueBackDate;
-    }
 }
