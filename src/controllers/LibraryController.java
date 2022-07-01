@@ -1,8 +1,7 @@
 package controllers;
 
+import com.google.gson.Gson;
 import enums.BookState;
-import exceptions.BookNotFoundException;
-import exceptions.MaximumBookCheckedOutException;
 import models.Book;
 import models.Library;
 import models.User;
@@ -13,34 +12,65 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryController {
 
     private final Library library = new Library();
-    private List<BookStateObserver> observers = new ArrayList<>();
+    private List<BookStateObserver> observers;
 
     public LibraryController() {
-        loadBooks("books.csv");
+        this(new ArrayList<>());
     }
-    
+
+    public LibraryController(List<BookStateObserver> observers) {
+        if (loadBooksFromJson()) {
+            return;
+        }
+
+        this.observers = observers;
+
+        //if no books are in the json, fallback to csv
+        loadBooksFromCSV("books.csv");
+    }
+
+    private boolean loadBooksFromJson() {
+        String filename = "books.json";
+        Gson gson = new Gson();
+        URL url = getClass().getClassLoader().getResource(filename);
+        // create a reader
+        List<Book> books = null;
+        try {
+            Reader reader = Files.newBufferedReader(Paths.get(url.toURI()));
+            books = gson.fromJson(reader, List.class);
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        // convert JSON file to map
+
+        return books != null && books.size() > 0;
+    }
+
     /**
      * Checks a book out if it can. The book's state should be AVAILABLE. If it's not, return false.
      * Upon successful check-out, the book's state should be set to CHECKED_OUT.
      * @param book - the book to be checked out
-     * @param user - the user that is checking out the book.
      * @return true if the book is checked out. Otherwise, false.
      */
-    //TODO Step 1.2 - Finish checkoutBook
     public boolean checkoutBook(Book book) {
         if (book.getState() != BookState.AVAILABLE) {
             return false;
         }
 
         book.setState(BookState.CHECKED_OUT);
+        User.currentUser.addBook(book);
+        ReceiptController.produceReceiptFile(book);
         updateObservers(book);
         return true;
     }
@@ -51,13 +81,13 @@ public class LibraryController {
      * @param book - the book being checked in
      * @return true if the book was successfully checked out
      */
-    //TODO Step 1.3 - Finish returnBook
     public boolean checkInBook(Book book) {
         if (book.getState() != BookState.CHECKED_OUT) {
             return false;
         }
 
         book.setState(BookState.CHECKED_IN);
+        User.currentUser.removeBook(book);
         updateObservers(book);
         return true;
     }
@@ -90,14 +120,7 @@ public class LibraryController {
         }
     }
 
-    
-    
-    
-    
-    
-    
-    
-   public void loadBooks(String resourceName) {
+   private void loadBooksFromCSV(String resourceName) {
         /**
          * NOTE: data in the CSV are in the following order:
          *       isbn, authors, publication year, title, average_rating
@@ -178,7 +201,7 @@ public class LibraryController {
         library.addBook(book);
     }
 
-    public Book[] getBooks() {
+    public List<Book> getBooks() {
         return library.getBooks();
     }
 

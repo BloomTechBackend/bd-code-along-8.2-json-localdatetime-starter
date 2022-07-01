@@ -19,6 +19,7 @@ public class WaitListController implements BookStateObserver {
         Queue<User> queue = waitList.get(book);
         if (queue == null) {
             queue = new PriorityQueue<>();
+            queue.add(user);
             waitList.put(book, queue);
         }
         queue.add(user);

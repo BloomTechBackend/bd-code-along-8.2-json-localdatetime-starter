@@ -21,6 +21,8 @@ public class User implements Comparable {
         this.books = new ArrayList<>();
     }
 
+    public static User currentUser = new User("Test User");;
+
     /**
      * Validates that the password is valid before saving it to the user.
      * Validations include a minimum character count of 8 and that a number,

@@ -11,7 +11,6 @@ public class Book {
     private final String publishedYear;
     private final String description;
     private float rating;
-    //TODO Step 1 Add state and default it to AVAILABLE
     private BookState state;
 
     private Book(String isbn, String title, String genre, String author, String publishedYear, String description, float rating) {

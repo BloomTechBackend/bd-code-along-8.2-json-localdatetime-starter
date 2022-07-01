@@ -10,7 +10,6 @@ public class EmailRule implements Rule {
 
     @Override
     public boolean isValid(String value) {
-        //TODO Step 3 - implement the regex for email
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(value);
         return matcher.find();
     }

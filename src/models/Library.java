@@ -11,8 +11,14 @@ public class Library {
         books.add(book);
     }
 
-    public Book[] getBooks() {
-        return books.toArray(new Book[books.size()]);
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void addBooks(List<Book> books) {
+        for (Book b : books) {
+            addBook(b);
+        }
     }
 
 }
